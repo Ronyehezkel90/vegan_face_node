@@ -9,7 +9,7 @@ if (local){
 }
 else {
     //todo: Change path to git path
-    path = "~/vegan_face_python/router.py";
+    path = "/home/ec2-user/vegan_face_python/router.py";
 }
 router.get('/', function (req, res, next) {
     console.log("top_rests requests has been sent");
