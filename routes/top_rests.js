@@ -3,13 +3,13 @@ var router = express.Router();
 
 /* GET users listing. */
 var path;
-var local=true;
+var local=false;
 if (local){
     path = "/home/ron/PycharmProjects/vegan_face/router.py";
 }
 else {
     //todo: Change path to git path
-    path = "/home/ron/PycharmProjects/vegan_face/router.py";
+    path = "~/vegan_face_python/router.py";
 }
 router.get('/', function (req, res, next) {
     console.log("top_rests requests has been sent");
