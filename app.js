@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var top_rests = require('./routes/top_rests');
+var vegan_face = require('./routes/vegan_face');
 
 
 var app = express();
@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/top_rests', top_rests);
+app.use('/vegan_face', vegan_face);
 
 console.log("Server listen to port 3000");
 // catch 404 and forward to error handler

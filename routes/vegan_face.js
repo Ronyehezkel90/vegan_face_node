@@ -3,8 +3,8 @@ var router = express.Router();
 
 /* GET users listing. */
 var path;
-var local=false;
-if (local){
+var local = true;
+if (local) {
     path = "/home/ron/PycharmProjects/vegan_face/router.py";
 }
 else {
@@ -16,7 +16,7 @@ router.get('/', function (req, res, next) {
     // for python script
     var spawn = require("child_process").spawn;
     var query = req.query.q;
-    var process = spawn('python', [path, "get_top_rests", query]);
+    var process = spawn('python', [path, query]);
     // Write the content of the file to response body
     process.stdout.on('data', function (data) {
         res.send(data.toString())
