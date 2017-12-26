@@ -29,7 +29,11 @@ router.get('/', function (req, res, next) {
     }
     // Write the content of the file to response body
     process.stdout.on('data', function (data) {
-        res.send(data.toString())
+        console.log("3");
+        console.log(data);
+        res.send(data.toString());
+        console.log("4");
+
     });
 });
 
