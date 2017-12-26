@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET users listing. */
 var path;
-var local = true;
+var local = false;
 if (local) {
     path = "/home/ron/PycharmProjects/vegan_face/router.py";
 }
