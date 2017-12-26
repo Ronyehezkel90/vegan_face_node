@@ -16,13 +16,16 @@ router.get('/', function (req, res, next) {
     // for python script
     var spawn = require("child_process").spawn;
     var query = req.query.q;
-    console.log(query);
+    console.log("query is: " + query);
     var process = null;
     if ('rest' in req.query) {
         process = spawn('python', [path, query, req.query['rest']]);
     }
     else {
+        console.log("1");
         process = spawn('python', [path, query]);
+        console.log("2");
+
     }
     // Write the content of the file to response body
     process.stdout.on('data', function (data) {
