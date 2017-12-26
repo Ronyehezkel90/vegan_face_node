@@ -9,13 +9,14 @@ if (local) {
 }
 else {
     //todo: Change path to git path
-    path = "/home/ubuntu/vegan_app/vegan_face_python/router.py";
+    path = "/home/ubuntu/vegan_app/vegan_face_python/temp_test.py";
 }
 router.get('/', function (req, res, next) {
-    console.log("top_rests requests has been sent");
+    console.log("request has been sent");
     // for python script
     var spawn = require("child_process").spawn;
     var query = req.query.q;
+    console.log(query);
     var process = null;
     if ('rest' in req.query) {
         process = spawn('python', [path, query, req.query['rest']]);
