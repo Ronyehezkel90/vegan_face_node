@@ -24,6 +24,9 @@ router.get('/', function (req, res, next) {
     if ('rest' in req.query) {
         process = spawn(python_version, [path, query, req.query['rest']]);
     }
+    else if ('rank' in req.query) {
+        process = spawn(python_version, [path, query, req.query['post_id'], req.query['rank']]);
+    }
     else {
         process = spawn(python_version, [path, query]);
     }
