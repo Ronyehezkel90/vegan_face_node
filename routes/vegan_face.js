@@ -22,10 +22,13 @@ router.get('/', function (req, res, next) {
     console.log("query is: " + query);
     var process = null;
     if ('rest' in req.query) {
-        process = spawn(python_version, [path, query, req.query['rest']]);
+        process = spawn(python_version, [path, query, req.query['page'], req.query['rest']]);
     }
     else if ('rank' in req.query) {
         process = spawn(python_version, [path, query, req.query['post_id'], req.query['rank']]);
+    }
+    else if (query === 'get_top_rests') {
+        process = spawn(python_version, [path, query, req.query['page']]);
     }
     else {
         process = spawn(python_version, [path, query]);
