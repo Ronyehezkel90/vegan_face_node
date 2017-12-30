@@ -29,6 +29,8 @@ router.get('/', function (req, res, next) {
     }
     else if (query === 'get_top_rests') {
         process = spawn(python_version, [path, query, req.query['page']]);
+    } else if (query === 'get_rest_data') {
+        process = spawn(python_version, [path, query, req.query['rest_field'], req.query['rest_name']]);
     }
     else {
         process = spawn(python_version, [path, query]);
