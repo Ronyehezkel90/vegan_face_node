@@ -4,7 +4,7 @@ var router = express.Router();
 /* GET users listing. */
 var path;
 var python_version;
-var local = false;
+var local = true;
 if (local) {
     path = "/home/ron/PycharmProjects/vegan_face/router.py";
     python_version = 'python'
@@ -28,7 +28,7 @@ router.get('/', function (req, res, next) {
         process = spawn(python_version, [path, query, req.query['post_id'], req.query['rank']]);
     }
     else if (query === 'get_top_rests') {
-        process = spawn(python_version, [path, query, req.query['page']]);
+        process = spawn(python_version, [path, query, req.query['page'], req.query['prop']]);
     } else if (query === 'get_rest_data') {
         process = spawn(python_version, [path, query, req.query['rest_field'], req.query['rest_name']]);
     }
