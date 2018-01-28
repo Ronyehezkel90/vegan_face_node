@@ -26,7 +26,7 @@ var getAllCollection = function (params) {
                     });
                     result = remove_fields(result, ["synonyms", "id", "recs", "_id", "hours", "about"]);
                     var from = params["page"] * params["rests_amount"];
-                    var to = from + 10;
+                    var to = from + params["rests_amount"];
                     result = result.slice(from, to);
                     db.close();
                     if (result)
