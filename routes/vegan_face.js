@@ -4,7 +4,7 @@ var mongo_handler = require('../mongo_handler');
 /* GET users listing. */
 var path;
 var python_version;
-var local = true;
+var local = false;
 if (local) {
     path = "/home/ron/PycharmProjects/vegan_face/router.py";
     python_version = 'python'
