@@ -11,6 +11,43 @@ function remove_fields(arr, fieldsList) {
     return arr;
 }
 
+function add_rank_field(restsCollection) {
+    for (var i = 0; i < restsCollection.length; i++) {
+        restsCollection[i]["rank"] = Object.keys(restsCollection[i]["recs"]).length;
+    }
+    restsCollection.sort(function (a, b) {
+        return (a.rank > b.rank) ? -1 : ((b.rank > a.rank) ? 1 : 0);
+    });
+    return restsCollection;
+}
+
+function slice_response(restsCollection, params) {
+    var from = params["page"] * params["rests_amount"];
+    var to = from + params["rests_amount"];
+    return restsCollection.slice(from, to);
+}
+
+function sort_by_location(restsCollection, params) {
+    var latitude = params["latitude"];
+    var longitude = params["longitude"];
+    var mileToKm = 1.609344;
+    restsCollection.map(function (rest) {
+        if ('location' in rest && rest["rank"] > 5) {
+            var distX = longitude - rest.location.longitude;
+            var distY = latitude - rest.location.latitude;
+            rest["distance"] = parseInt(Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2)) * mileToKm * 100000, 10);
+        }
+        else
+            rest["distance"] = 999999;
+        return rest;
+    });
+    restsCollection.sort(function (a, b) {
+        return (a.distance > b.distance) ? 1 : ((b.distance > a.distance) ? -1 : 0);
+    });
+    return restsCollection;
+
+}
+
 var getAllCollection = function (params) {
     return new Promise(
         (resolve, reject) => { // fat arrow
@@ -18,16 +55,12 @@ var getAllCollection = function (params) {
                 if (err) throw err;
                 db.collection(params["collection"]).find().toArray(function (err, result) {
                     if (err) throw err;
-                    for (var i = 0; i < result.length; i++) {
-                        result[i]["rank"] = Object.keys(result[i]["recs"]).length;
+                    result = add_rank_field(result);
+                    if (params["type"] === "location") {
+                        result = sort_by_location(result, params);
                     }
-                    result.sort(function (a, b) {
-                        return (a.rank > b.rank) ? -1 : ((b.rank > a.rank) ? 1 : 0);
-                    });
-                    result = remove_fields(result, ["synonyms", "id", "recs", "_id", "hours", "about"]);
-                    var from = params["page"] * params["rests_amount"];
-                    var to = from + params["rests_amount"];
-                    result = result.slice(from, to);
+                    result = remove_fields(result, ["location", "synonyms", "id", "recs", "_id", "hours", "about"]);
+                    result = slice_response(result, params);
                     db.close();
                     if (result)
                         resolve(result);
@@ -63,30 +96,3 @@ var getRestData = function (restObj) {
 
 exports.getAllCollection = getAllCollection;
 exports.getRestData = getRestData;
-
-// exports.getAllCollection = async function getAllCollection(collectionName) {
-//     MongoClient.connect(url, function (err, db) {
-//         if (err) throw err;
-//         db.collection(collectionName).find().toArray(function (err, result) {
-//             if (err) throw err;
-//             for (var i = 0; i < result.length; i++) {
-//                 result[i]["rank"] = Object.keys(result[i]["recs"]).length;
-//             }
-//             result.sort(function (a, b) {
-//                 return (a.rank > b.rank) ? 1 : ((b.rank > a.rank) ? -1 : 0);
-//             });
-//             var fieldsToRemove = ["synonyms", "id", "recs", "_id", "hours"];
-//             for (var i = 0; i < result.length; i++) {
-//                 fieldsToRemove.forEach(function (field) {
-//                     delete result[i][field];
-//                 });
-//             }
-//             db.close();
-//             return result;
-//         });
-//     });
-// };
-
-// exports.getAllCollection("restaurants_data").then(function (val) {
-//     console.log(val);
-// });

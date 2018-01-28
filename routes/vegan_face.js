@@ -4,7 +4,7 @@ var mongo_handler = require('../mongo_handler');
 /* GET users listing. */
 var path;
 var python_version;
-var local = false;
+var local = true;
 if (local) {
     path = "/home/ron/PycharmProjects/vegan_face/router.py";
     python_version = 'python'
@@ -22,7 +22,7 @@ const functions_dict = {
     'get_top_rests': {
         func: mongo_handler.getAllCollection,
         required: [{"collection": "restaurants_data"}, {"rests_amount": 50}],
-        params: ["page"]
+        params: ["page", "type", "latitude", "longitude"]
     },
     'get_rest_data': {func: mongo_handler.getRestData, required: [], params: ["rest_name"]}
 };
