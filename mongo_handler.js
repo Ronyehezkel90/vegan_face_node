@@ -52,7 +52,7 @@ function sort_by_location(restsCollection, params) {
         if ('location' in rest && rest["rank"] > 5)
             rest["distance"] = getDistanceFromLatLonInKm(latitude, longitude, rest.location.latitude, rest.location.longitude);
         else
-            rest["distance"] = 999999;
+            rest["distance"] = 9999999;
         return rest;
     });
     restsCollection.sort(function (a, b) {
