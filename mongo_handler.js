@@ -4,6 +4,9 @@ var exports = module.exports = {};
 
 function remove_fields(arr, fieldsList) {
     for (var i = 0; i < arr.length; i++) {
+        if ("picture" in arr[i]) {
+            arr[i]["pic_url"] = arr[i]["picture"]["data"]["url"]
+        }
         fieldsList.forEach(function (field) {
             delete arr[i][field];
         });
@@ -38,7 +41,7 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     ;
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     var d = R * c; // Distance in km
-    return parseInt(d*1000, 10);
+    return parseInt(d * 1000, 10);
 }
 
 function deg2rad(deg) {
@@ -73,7 +76,7 @@ var getAllCollection = function (params) {
                     if (params["type"] === "location") {
                         result = sort_by_location(result, params);
                     }
-                    result = remove_fields(result, ["location", "synonyms", "id", "recs", "_id", "hours", "about"]);
+                    result = remove_fields(result, ["synonyms", "id", "recs", "_id", "hours", "picture"]);
                     result = slice_response(result, params);
                     db.close();
                     if (result)
