@@ -99,7 +99,7 @@ function limit_posts_response(postsList) {
     postsList.map(function (post) {
         post["imgUrls"] = post["imgUrls"].slice(0, 3);
         if (post["message"])
-            post["message"] = post["message"].slice(0, 1000);
+            post["message"] = post["message"].slice(0, 900);
         return post;
     });
     return postsList;
