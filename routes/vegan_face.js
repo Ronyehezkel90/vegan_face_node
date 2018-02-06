@@ -24,7 +24,9 @@ const functions_dict = {
         required: [{"collection": "restaurants_data"}, {"rests_amount": 50}],
         params: ["page", "type", "latitude", "longitude"]
     },
-    'get_rest_data': {func: mongo_handler.getRestData, required: [], params: ["rest_name"]}
+    'get_rest_data': {func: mongo_handler.getRestData, required: [], params: ["rest_name"]},
+    'get_posts': {func: mongo_handler.getPostsByRest, required: [], params: ["rest_name"]}
+
 };
 router.get('/', function (req, res, next) {
     var query = req.query.q;
