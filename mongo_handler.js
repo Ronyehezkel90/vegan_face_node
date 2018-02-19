@@ -1,13 +1,13 @@
 MongoClient = require('mongodb').MongoClient;
 var Utils = require('./utils');
 
-url = "mongodb://localhost:27017/veganDBA";
+url = "mongodb://localhost:27017/veganDB";
 var exports = module.exports = {};
 
 
 var getAllCollection = function (params) {
     return new Promise(
-        (resolve, reject) => { // fat arrow
+        (resolve, reject) => {
             MongoClient.connect(url, function (err, db) {
                 if (err) throw err;
                 db.collection(params["collection"]).find().toArray(function (err, result) {
@@ -77,6 +77,38 @@ var getPostsByRest = function (params) {
         }
     );
 };
+
+var getRestsByQuery = function (params) {
+    return new Promise(
+        (resolve, reject) => { // fat arrow
+            MongoClient.connect(url, function (err, db) {
+                if (err) throw err;
+                db.collection("posts").find({'message': new RegExp('^' + params['search_word'])}).toArray(function (err, posts_result) {
+                    if (err) throw err;
+                    if (posts_result) {
+                        db.collection("restaurants_data").find().toArray(function (err, rests_result) {
+                            if (err) throw err;
+                            db.close();
+                            if (rests_result) {
+                                rests_result = Utils.add_rank_field(rests_result);
+                                rests_result = Utils.sort_by_query(rests_result, posts_result);
+                                rests_result = Utils.remove_fields(rests_result, ["synonyms", "id", "recs", "_id", "hours", "picture"]);
+                                rests_result = Utils.slice_response(rests_result, params);
+                                resolve(rests_result);
+                            }
+                            else
+                                reject('problem')
+                        });
+                    }
+                    else
+                        reject('problem')
+                });
+            });
+        }
+    );
+};
+
 exports.getAllCollection = getAllCollection;
+exports.getRestsByQuery = getRestsByQuery;
 exports.getRestData = getRestData;
 exports.getPostsByRest = getPostsByRest;

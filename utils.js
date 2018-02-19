@@ -23,6 +23,7 @@ function add_rank_field(restsCollection) {
     return restsCollection;
 }
 
+
 function slice_response(restsCollection, params) {
     var from = params["page"] * params["rests_amount"];
     var to = from + params["rests_amount"];
@@ -61,8 +62,32 @@ function sort_by_location(restsCollection, params) {
         return (a.distance > b.distance) ? 1 : ((b.distance > a.distance) ? -1 : 0);
     });
     return restsCollection;
-
 }
+
+function find_common_posts_ids(arr1, arr2) {
+    var ret = [];
+    for (var i in arr1) {
+        if (arr2.indexOf(arr1[i]) > -1) {
+            ret.push(arr1[i]);
+        }
+    }
+    return ret.length;
+}
+
+function sort_by_query(restsCollection, postsCollection) {
+    postsIds = postsCollection.map(function (post) {
+        return post['id']
+    });
+    restsCollection.map(function (rest) {
+        rest['count_search'] = find_common_posts_ids(Object.keys(rest['recs']), postsIds);
+        return rest;
+    });
+    restsCollection.sort(function (a, b) {
+        return (a.count_search > b.count_search) ? -1 : ((b.count_search > a.count_search) ? 1 : 0);
+    });
+    return restsCollection;
+}
+
 
 function getReactionsCount(post) {
     return "reactions" in post ? Object.values(post.reactions).reduce((a, b) => a + b, 0) : 0;
@@ -107,6 +132,7 @@ function limit_posts_response(postsList) {
 
 
 exports.sort_by_location = sort_by_location;
+exports.sort_by_query = sort_by_query;
 exports.remove_fields = remove_fields;
 exports.add_rank_field = add_rank_field;
 exports.slice_response = slice_response;
