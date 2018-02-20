@@ -1,7 +1,7 @@
 MongoClient = require('mongodb').MongoClient;
 var Utils = require('./utils');
 
-url = "mongodb://localhost:27017/veganDB";
+url = "mongodb://localhost:27017/veganDBA";
 var exports = module.exports = {};
 
 
